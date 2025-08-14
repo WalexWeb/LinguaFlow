@@ -1,5 +1,7 @@
 import { User } from "../models/user.model.js";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { JWT_SECRET, JWT_EXPIRES_IN } from "../config/env.config.js";
 
 export const register = async (req, res, next) => {
   try {
@@ -23,9 +25,13 @@ export const register = async (req, res, next) => {
       password: hashedPassword,
     });
 
+    const token = jwt.sign({ userId: newUser._id }, JWT_SECRET, {
+      expiresIn: JWT_EXPIRES_IN,
+    });
+
     res.status(201).json({
       message: "Пользователь успешно зарегистрирован",
-      data: { user: newUser },
+      data: { token, user: newUser },
     });
   } catch (error) {
     next(error);
@@ -48,9 +54,14 @@ export const login = async (req, res, next) => {
       return res.status(400).json({ message: "Неверный пароль" });
     }
 
+    // Генерируем токен
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
+      expiresIn: JWT_EXPIRES_IN,
+    });
+
     res.status(200).json({
       message: "Успешный вход",
-      data: { user },
+      data: { token, user },
     });
   } catch (error) {}
 };
