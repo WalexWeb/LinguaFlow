@@ -6,11 +6,16 @@ import connectToDb from "./db/mongodb.js";
 import { userRoutes } from "./routes/user.routes.js";
 import helmet from "helmet";
 import compression from "compression";
+import cors from "cors";
+import { error } from "./middleware/error.middleware.js";
+import { limiter } from "./middleware/rateLimit.middleware.js";
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use(cors());
 
 // Защита от уязвимостей
 app.use(helmet());
@@ -19,13 +24,10 @@ app.use(helmet());
 app.use(compression());
 
 // Ограничение количества запросов
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 минут
-  max: 10, // максимум 10 запросов с одного IP за 15 минут
-  message: "Слишком много запросов с вашего IP, попробуйте позже",
-});
-
 app.use(limiter);
+
+// Обработка ошибок
+app.use(error);
 
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRoutes);

@@ -29,10 +29,7 @@ export const register = async (req, res, next) => {
       expiresIn: JWT_EXPIRES_IN,
     });
 
-    res.status(201).json({
-      message: "Пользователь успешно зарегистрирован",
-      data: { token, user: newUser },
-    });
+    res.status(201).json({ token, user: newUser });
   } catch (error) {
     next(error);
   }
@@ -59,9 +56,6 @@ export const login = async (req, res, next) => {
       expiresIn: JWT_EXPIRES_IN,
     });
 
-    res.status(200).json({
-      message: "Успешный вход",
-      data: { token, user },
-    });
+    res.status(200).json({ token, user });
   } catch (error) {}
 };
