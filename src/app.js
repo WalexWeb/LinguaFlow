@@ -4,11 +4,19 @@ import { PORT } from "./config/env.config.js";
 import { authRouter } from "./routes/auth.routes.js";
 import connectToDb from "./db/mongodb.js";
 import { userRoutes } from "./routes/user.routes.js";
+import helmet from "helmet";
+import compression from "compression";
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// Защита от уязвимостей
+app.use(helmet());
+
+// Сжатие ответов для уменьшения размера передаваемых данных
+app.use(compression());
 
 // Ограничение количества запросов
 const limiter = rateLimit({
