@@ -23,6 +23,7 @@ export const register = async (req, res, next) => {
       username,
       email,
       password: hashedPassword,
+      isOnboarded: false,
     });
 
     const token = jwt.sign({ userId: newUser._id }, JWT_SECRET, {
@@ -57,5 +58,7 @@ export const login = async (req, res, next) => {
     });
 
     res.status(200).json({ token, user });
-  } catch (error) {}
+  } catch (error) {
+    next(error);
+  }
 };
