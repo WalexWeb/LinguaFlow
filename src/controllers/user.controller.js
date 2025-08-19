@@ -62,3 +62,28 @@ export const completeOnboarding = async (req, res) => {
     });
   }
 };
+
+export const updateUserScore = async (req, res) => {
+  try {
+    const { score } = req.body;
+
+    // Получаем текущий счет пользователя
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({ message: "Пользователь не найден" });
+    }
+
+    // Прибавляем новое значение к текущему счету
+    user.score += score;
+
+    await user.save();
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(400).json({
+      message: "Ошибка при обновлении счета",
+      error: error.message,
+    });
+  }
+};
