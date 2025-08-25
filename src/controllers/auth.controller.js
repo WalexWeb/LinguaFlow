@@ -30,7 +30,14 @@ export const register = async (req, res, next) => {
       expiresIn: JWT_EXPIRES_IN,
     });
 
-    res.status(201).json({ token, user: newUser });
+    res
+      .status(201)
+      .cookie("token", token, {
+        httpOnly: true, // Для защиты от XSS атак
+        sameSite: "strict", // Для защиты от CSRF атак
+        maxAge: 24 * 60 * 60 * 1000, // 1 день
+      })
+      .json({ user: newUser });
   } catch (error) {
     next(error);
   }
@@ -57,7 +64,14 @@ export const login = async (req, res, next) => {
       expiresIn: JWT_EXPIRES_IN,
     });
 
-    res.status(200).json({ token, user });
+    res
+      .status(200)
+      .cookie("token", token, {
+        httpOnly: true, // Для защиты от XSS атак
+        sameSite: "strict", // Для защиты от CSRF атак
+        maxAge: 24 * 60 * 60 * 1000, // 1 день
+      })
+      .json({ user });
   } catch (error) {
     next(error);
   }

@@ -1,5 +1,4 @@
 import express from "express";
-import rateLimit from "express-rate-limit";
 import { PORT } from "./config/env.config.js";
 import { authRouter } from "./routes/auth.routes.js";
 import connectToDb from "./db/mongodb.js";
@@ -9,19 +8,27 @@ import compression from "compression";
 import cors from "cors";
 import { error } from "./middleware/error.middleware.js";
 import { limiter } from "./middleware/rateLimit.middleware.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:8080",
+    credentials: true,
+  })
+);
 
 // Защита от уязвимостей
 app.use(helmet());
 
 // Сжатие ответов для уменьшения размера передаваемых данных
 app.use(compression());
+
+app.use(cookieParser());
 
 // Ограничение количества запросов
 app.use(limiter);
