@@ -33,12 +33,12 @@ LinguaFlow — современное веб-приложение для изу�
 1. **Установите зависимости:**
 
    ```bash
-   npm install
+   bun install
    ```
 
 2. **Запустите проект:**
    ```bash
-   npm run dev
+   bun run dev
    ```
 
 3. **Запуск через Docker:**
@@ -46,7 +46,7 @@ LinguaFlow — современное веб-приложение для изу�
 
    ```bash
    docker build -t linguaflow-api .
-   docker run -p 3000:3000 --env-file .env linguaflow-api
+   docker run -p 8000:8000 --env-file .env linguaflow-api
    ```
 
 ---

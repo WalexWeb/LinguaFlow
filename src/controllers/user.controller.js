@@ -87,3 +87,31 @@ export const updateUserScore = async (req, res) => {
     });
   }
 };
+
+export const addAchievements = async (req, res) => {
+  try {
+    const { achievements } = req.body;
+
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      { $addToSet: { achievements: achievements } },
+      { new: true, runValidators: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "Пользователь не найден" });
+    }
+
+    // Проверяем, есть ли уже такое достижение
+    if (user.achievements.includes(achievements)) {
+      return res.status(400).json({ message: "Достижение уже добавлено" });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(400).json({
+      message: "Ошибка при добавлении достижения",
+      error: error.message,
+    });
+  }
+};

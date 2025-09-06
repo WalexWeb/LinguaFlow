@@ -43,6 +43,10 @@ const userSchema = new Schema(
       default: 0,
       min: 0,
     },
+    achievements: {
+      type: [String],
+      default: [],
+    },
   },
   {
     timestamps: true,
