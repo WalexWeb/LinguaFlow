@@ -9,6 +9,7 @@ import cors from "cors";
 import { error } from "./middleware/error.middleware.js";
 import { limiter } from "./middleware/rateLimit.middleware.js";
 import cookieParser from "cookie-parser";
+import { gamesRouter } from "./routes/game.routes.js";
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use(error);
 
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRoutes);
+app.use("/api/games", gamesRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
