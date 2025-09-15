@@ -6,6 +6,7 @@ import {
   getGames,
   updateGame,
 } from "../controllers/game.controller.js";
+import { addResults } from "../controllers/gameProgress.controller.js";
 
 const router = new Router();
 
@@ -21,6 +22,6 @@ router.delete("/:id", deleteGame);
 // Обновление результатов игры у пользователя
 router.get("/results/:id", authorize);
 
-router.post("/results/:id", authorize);
+router.patch("/results/:id", authorize, addResults);
 
 export const gamesRouter = router;
